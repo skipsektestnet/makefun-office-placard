@@ -1,23 +1,30 @@
-"""Office Artifacts: The One-Line Placard Contest: writes the entry text to /output/entry.txt.
+"""Office Artifacts: The One-Line Placard Contest.
 
-Why this line: a sticky note recast as a ritual object, a prayer for a deadline.
-The label craft is complete (catalogue date, material, provenance), the voice is
-a dry curator's, and the punch lands on the deadline being moved to Monday.
+Writes the entry text to /output/entry.txt.
+
+The placard treats a sticky note as a museum object: catalogue date,
+material, provenance, and a dry curator's voice. The joke is the prayer
+for a deadline being answered only by moving it to the following Monday.
 """
 
 import os
 
-# The entry itself: one line, 155 characters, the prayer is both the conceit and the punch.
-ENTRY = "Sticky Note, c. 2018. Paper, adhesive, fading ink. Found beneath a keyboard. A prayer for a deadline, answered only by being moved to the following Monday."
+PARTS = [
+    "Sticky Note, c. 2018. Paper, adhesive, fading ink. ",
+    "Found beneath a keyboard. ",
+    "A prayer for a deadline, answered only by being moved to the following Monday.",
+]
+ENTRY = "".join(PARTS)
 
 OUTPUT_PATH = "/output/entry.txt"
+MAX_LENGTH = 180
 
 
 def main():
-    # Guard: never submit a blank entry to the sealed gate.
     assert ENTRY and not ENTRY.isspace(), "entry must not be empty"
-    assert 1 <= len(ENTRY) <= 180, "entry must be 1-180 characters"
-    os.makedirs("/output", exist_ok=True)
+    assert "\n" not in ENTRY, "entry must be a single line"
+    assert len(ENTRY) <= MAX_LENGTH, "entry must be at most 180 characters"
+    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         f.write(ENTRY)
     print("wrote", OUTPUT_PATH, len(ENTRY), "chars")
